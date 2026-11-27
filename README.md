@@ -24,19 +24,14 @@ The local files must be committed and pushed by the repository owner before they
 
 ## Setup and execution
 
-The project has been tested with Python 3.9.6. From the project root:
+The project has been tested with Python 3.12.0. From the project root:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m model.preprocess
 python -m model.train
 python -m model.plot_metrics
-python -m unittest discover -v
 ```
-
-On Windows, activate the virtual environment with `.venv\Scripts\activate` instead.
 
 `model.preprocess` writes `train_data.csv` and `test_data.csv`; `model.train` prints the evaluation table and saves metrics and fitted models under `model/results/`; `model.plot_metrics` generates the chart below from the saved metrics CSV. These commands overwrite their generated outputs. After rerunning the models, regenerate the chart and update the table and observations if results change. Run the assignment in BITS Virtual Lab and capture the execution for the required screenshot.
 
@@ -55,10 +50,10 @@ Precision, recall, and F1 are macro-averaged across classes, giving each class e
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
 |---|---:|---:|---:|---:|---:|---:|
 | Logistic Regression | 0.6875 | 0.8019 | 0.6264 | 0.5078 | 0.5079 | 0.4226 |
-| Decision Tree | 0.7875 | 0.7715 | 0.7015 | 0.6692 | 0.6822 | 0.6163 |
-| kNN | 0.7417 | 0.8446 | 0.7644 | 0.6000 | 0.6301 | 0.5312 |
+| Decision Tree | 0.7792 | 0.7659 | 0.6957 | 0.6633 | 0.6763 | 0.6012 |
+| kNN | 0.7417 | 0.8452 | 0.7644 | 0.6000 | 0.6301 | 0.5312 |
 | Naive Bayes | 0.5042 | 0.7115 | 0.6638 | 0.3723 | 0.2912 | 0.1731 |
-| Random Forest | 0.8000 | 0.9098 | 0.5415 | 0.5705 | 0.5550 | 0.6333 |
+| Random Forest | 0.8000 | 0.9103 | 0.5415 | 0.5705 | 0.5550 | 0.6333 |
 
 ### Metric visualization
 
@@ -71,10 +66,10 @@ The chart uses the full-precision values in `model/results/model_metrics.csv`; l
 | ML Model Name | Observation about model performance |
 |---|---|
 | Logistic Regression | Accuracy is 0.6875 and macro F1 is 0.5079; it identifies 1 of 16 low-class test cases (recall 0.0625). |
-| Decision Tree | Has the highest macro F1 (0.6822) and macro recall (0.6692), with 0.7875 accuracy. It identifies 6 of 16 low-class cases (recall 0.3750). |
+| Decision Tree | Has the highest macro F1 (0.6763) and macro recall (0.6633), with 0.7792 accuracy. It identifies 6 of 16 low-class cases (recall 0.3750). |
 | kNN | Has the highest macro precision (0.7644), with macro F1 0.6301 and low-class recall 0.2500 (4 of 16). |
 | Naive Bayes | Has the lowest accuracy (0.5042) and macro F1 (0.2912). It recalls all high-class cases but only 1 of 16 low-class and 6 of 110 medium-class cases. |
-| Random Forest | Leads on accuracy (0.8000), AUC (0.9098), and MCC (0.6333), but identifies none of the 16 low-class cases, so its macro F1 is 0.5550. |
+| Random Forest | Leads on accuracy (0.8000), AUC (0.9103), and MCC (0.6333), but identifies none of the 16 low-class cases, so its macro F1 is 0.5550. |
 | Overall winner | **Decision Tree** for this comparison, prioritizing macro F1 because the low class is underrepresented. It performs better across classes by that measure, although its low-class recall is only 0.3750. Random Forest is preferable only if the priority is the higher observed accuracy or AUC, despite its failure to identify low-class cases. |
 
 These are observations from one held-out split, not a guarantee of future performance. The winner was chosen after reviewing these test results; further independent evaluation would be needed to confirm it.
@@ -88,6 +83,3 @@ These are observations from one held-out split, not a guarantee of future perfor
 - `model/plot_metrics.py` — visualization of all six comparison metrics.
 - `model/results/` — generated metrics and fitted estimators.
 - `requirements.txt` — direct runtime dependencies.
-- `tests/` — reproducibility and model-runner tests.
-
-To run selected or additional plugins, pass importable module names after `--plugins`. Each plugin defines `MODEL_NAME` and `create_model()` returning a classifier with `fit`, `predict`, `predict_proba`, and fitted `classes_`.
